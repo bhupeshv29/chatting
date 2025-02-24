@@ -34,13 +34,12 @@ function App() {
     }, [username]);
 
     const sendMessage = () => {
-        const message = inputRef.current?.value.trim();
-        if (!message || !ws) return;
-
+        const message = inputRef.current?.value.trim();  // Use optional chaining (?.)
+        if (!message || !ws) return; // Avoid errors if input is null
+    
         ws.send(JSON.stringify({ type: "chat", payload: { message } }));
-        inputRef.current.value = "";
+        if (inputRef.current) inputRef.current.value = ""; // Ensure inputRef is not null before using it
     };
-
     // Handle "Enter" key press for chat
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") sendMessage();
