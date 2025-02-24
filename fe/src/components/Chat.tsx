@@ -34,20 +34,13 @@ function Chat() {
     }, [username]);
 
     const sendMessage = () => {
-        if (!ws || !inputRef.current) return; // Ensure WebSocket and input field exist
-    
-        const message = inputRef.current.value.trim();
-        if (!message) return; // Prevent sending empty messages
-    
-        ws.send(
-            JSON.stringify({
-                type: "chat",
-                payload: { message },
-            })
-        );
-    
-        inputRef.current.value = ""; // Clear input after sending
+        const message = inputRef.current?.value.trim();
+        if (!message || !ws) return;
+
+        ws.send(JSON.stringify({ type: "chat", payload: { message } }));
+        inputRef.current.value = "";
     };
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") sendMessage();
     };
