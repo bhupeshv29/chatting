@@ -32,12 +32,12 @@ function Chat() {
 
         return () => newWs.close();
     }, [username]);
-
+    
     const sendMessage = () => {
-        const message = inputRef.current?.value.trim();
-        if (!message || !ws) return;
-
-        ws.send(JSON.stringify({ type: "chat", payload: { message } }));
+        if (!inputRef.current) return; // Prevent error
+        const message = inputRef.current.value.trim();
+        if (!message) return;
+        ws?.send(JSON.stringify({ type: "chat", payload: { message } }));
         inputRef.current.value = "";
     };
 
