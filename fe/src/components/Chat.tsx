@@ -71,7 +71,6 @@ function Chat() {
                     <button onClick={() => navigate("/")} className="mt-2 text-gray-400">Go Back</button>
                 </div>
             ) : loading ? (
-                // Loader while the WebSocket connection is initializing
                 <div className="flex flex-col items-center justify-center h-full">
                     <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                     <p className="mt-4 text-gray-400">Connecting to the chat...</p>
