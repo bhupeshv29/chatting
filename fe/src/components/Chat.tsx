@@ -6,6 +6,7 @@ function Chat() {
     const [username, setUsername] = useState<string>("");
     const [inputName, setInputName] = useState<string>("");
     const [ws, setWs] = useState<WebSocket | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
@@ -14,10 +15,12 @@ function Chat() {
     useEffect(() => {
         if (!username) return;
 
+        setLoading(true);
         const newWs = new WebSocket(WS_URL);
         setWs(newWs);
 
         newWs.onopen = () => {
+            setLoading(false);
             newWs.send(JSON.stringify({ type: "join", payload: { roomId: "general", name: username } }));
         };
 
@@ -30,11 +33,15 @@ function Chat() {
             }, 100);
         };
 
+        newWs.onerror = () => {
+            setLoading(false);
+        };
+
         return () => newWs.close();
-    }, [username]);
-    
+    }, [username,WS_URL]);
+
     const sendMessage = () => {
-        if (!inputRef.current) return; // Prevent error
+        if (!inputRef.current) return;
         const message = inputRef.current.value.trim();
         if (!message) return;
         ws?.send(JSON.stringify({ type: "chat", payload: { message } }));
@@ -62,6 +69,12 @@ function Chat() {
                     />
                     <button onClick={joinChat} className="px-4 py-2 bg-blue-600 rounded text-white">Join Chat</button>
                     <button onClick={() => navigate("/")} className="mt-2 text-gray-400">Go Back</button>
+                </div>
+            ) : loading ? (
+                // Loader while the WebSocket connection is initializing
+                <div className="flex flex-col items-center justify-center h-full">
+                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-gray-400">Connecting to the chat...</p>
                 </div>
             ) : (
                 <>
