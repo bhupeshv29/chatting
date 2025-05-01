@@ -11,16 +11,16 @@ interface User {
 let users: User[] = [];
 
 // Function to send periodic pings
-function keepAlive() {
-    users.forEach((user) => {
-        if (user.socket.readyState === WebSocket.OPEN) {
-            user.socket.ping();
-        }
-    });
-}
+// function keepAlive() {
+//     users.forEach((user) => {
+//         if (user.socket.readyState === WebSocket.OPEN) {
+//             user.socket.ping();
+//         }
+//     });
+// }
 
-// Set interval to send pings every 30 seconds
-setInterval(keepAlive, 30000);
+// // Set interval to send pings every 30 seconds
+// setInterval(keepAlive, 30000);
 
 wss.on("connection", (socket) => {
     console.log("A user connected.");
